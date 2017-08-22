@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Conto">
+
+	<resultMap id="ContoResultMap" type="Conto">
+ 		<result property="id" column="id"/>
+ 		<result property="nome" column="nome"/>
+	    <result property="entrate" column="entrate"/>
+	    <result property="uscite" column="uscite"/>
+	    <result property="trasfUscite" column="trasf_uscite"/>
+	    <result property="trasfEntrate" column="trasf_entrate"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="ContoResultMap">
+		SELECT c.id, c.nome, IFNULL(v.uscite, 0.00) uscite, IFNULL(v.entrate, 0.00) entrate,
+			IFNULL(v.trasf_uscite, 0.00) trasf_uscite, IFNULL(v.trasf_entrate, 0.00) trasf_entrate
+		  FROM conto c 
+		  left join v_report_conto v on c.id = v.idConto
+	</select>
+	
+	<select id="check" resultType="int" parameterType="String">
+		SELECT Count(id) FROM conto WHERE UPPER(nome) = #{nome}
+	</select>
+	
+	<insert id="insert" parameterType="Conto" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO conto(nome)
+		VALUES (#{nome})
+	</insert>
+	
+</mapper>

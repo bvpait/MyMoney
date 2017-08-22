@@ -1,0 +1,36 @@
+<div>
+	<div>
+		<div>Categorie</div>
+		<table data-ng-table="tableCategorie" class="table table-condensed table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>ID Padre</th>
+				</tr>
+			</thead>
+			<tr data-ng-repeat="row in $data">
+				<td>{{row.id}}</td>
+				<td>{{row.nome}}</td>
+				<td>{{row.idPadre}}</td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<div>
+			<label>Nome categoria</label> <input type="text" data-ng-model="newCategoria.nome">
+		</div>
+		<div>
+			<label>Categoria padre</label>
+			<select data-ng-model="newCategoria.idPadre">
+				<option value="0">Nessuno</option>
+				<option data-ng-repeat="categoria in ctrl.listaCategorie | filter:{idPadre:0}" value="{{categoria.id}}">{{categoria.nome}}</option> 
+			</select>
+		</div>
+		<button type="button" class="btn" data-ng-click="inserisciCategoria()">Inserisci</button>
+	</div>
+</div>
+<div data-ng-form="catForm">
+	<input type="file" name="c_content" file-model="fileCat.content" class="editable-input form-control input-sm" />
+	<button data-ng-click="uploadFile()">Aggiungi categorie</button>
+</div>

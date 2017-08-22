@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Categoria">
+
+	<resultMap id="CategoriaResultMap" type="Categoria">
+ 		<result property="id" column="id"/>
+ 		<result property="nome" column="nome"/>
+	    <result property="idPadre" column="idPadre"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="CategoriaResultMap">
+		SELECT * FROM categoria
+	</select>
+	
+	<select id="getID" parameterType="Categoria" resultType="int">
+		SELECT IFNULL(SUM(id), 0)
+		  FROM categoria
+		 WHERE UPPER(nome) = UPPER(#{nome})
+			<if test="idPadre > 0">
+			   AND idPadre = #{idPadre}
+			</if>
+			<if test="idPadre == 0">
+			   AND idPadre IS NULL
+			</if> 
+	</select>
+	
+	<insert id="insert" parameterType="Categoria" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO categoria(nome, idPadre)
+		<if test="idPadre > 0">
+			VALUES (#{nome}, #{idPadre})
+		</if>
+		<if test="idPadre == 0">
+			VALUES (#{nome}, NULL)
+		</if>
+	</insert>
+	
+	
+</mapper>

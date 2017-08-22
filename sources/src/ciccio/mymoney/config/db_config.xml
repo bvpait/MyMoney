@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+    
+    <typeAliases>
+    	<typeAlias alias="Beneficiario" type="ciccio.mymoney.bean.Beneficiario" />
+    	<typeAlias alias="BilancioMensile" type="ciccio.mymoney.bean.BilancioMensile" />
+    	<typeAlias alias="Categoria" type="ciccio.mymoney.bean.Categoria" />
+    	<typeAlias alias="Conto" type="ciccio.mymoney.bean.Conto" />
+    	<typeAlias alias="Transazione" type="ciccio.mymoney.bean.Transazione" />
+    	<typeAlias alias="TransazioneBase" type="ciccio.mymoney.bean.TransazioneBase" />
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			
+			<!-- connecting to Local MySql -->
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://localhost:3306/my_money" />
+				<property name="username" value="ciccio" />
+				<property name="password" value="Palermo79" />
+			</dataSource>
+		</environment>
+		<environment id="server">
+			<transactionManager type="JDBC" />
+			
+			<!-- connecting to Server MySql -->
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://192.168.1.100:3306/my_money" />
+				<property name="username" value="ciccio" />
+				<property name="password" value="Palermo79" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="ciccio/mymoney/config/db_mapper_categoria.xml" />
+		<mapper resource="ciccio/mymoney/config/db_mapper_conto.xml" />
+		<mapper resource="ciccio/mymoney/config/db_mapper_beneficiario.xml" />
+		<mapper resource="ciccio/mymoney/config/db_mapper_bilancioMensile.xml" />
+		<mapper resource="ciccio/mymoney/config/db_mapper_mensileDefault.xml" />
+		<mapper resource="ciccio/mymoney/config/db_mapper_transazione.xml" />
+	</mappers>
+</configuration>

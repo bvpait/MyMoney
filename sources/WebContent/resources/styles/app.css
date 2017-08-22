@@ -1,0 +1,220 @@
+#content {
+	font-size: 12px;
+}
+ul li {
+	list-style-type: none;
+}
+select {
+	height: 25px;
+}
+
+.left {
+	float: left;
+}
+.right {
+	float: right!important;
+}
+.center {
+ 	text-align: center;
+}
+.clear {
+	clear: both;
+}
+
+.menu ul li {
+	float: left;
+    width: 95px;
+}
+.categoria_mensile {
+	float: left;
+	clear: both;
+}
+.categoria_mensile ul li {
+	width: 100px;
+	padding-bottom: 5px;
+}
+.categoria_mensile ul li button {
+	width: 100%;
+	font-size: 11px;
+    padding: 6px 10px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.sottocategoria_mensile {
+	float: left;
+    width: 85%;
+    margin-left: 20px;
+}
+
+.table-mensile th.w24,
+.table-mensile td.w24 {
+	width: 24px;
+}
+.table-mensile th.w65,
+.table-mensile td.w65 {
+	width: 65px;
+}
+.table-mensile th.w70,
+.table-mensile td.w70 {
+	width: 70px;
+}
+.table-mensile th.w150,
+.table-mensile td.w150 {
+	width: 150px;
+}
+.table-mensile th.w220,
+.table-mensile td.w220 {
+	width: 220px;
+}
+
+button.selected {
+	background-color: goldenrod;
+	font-weight: bold;
+}
+ul li button:hover {
+    background: snow;
+}
+footer {
+	bottom: 0;
+    position: fixed;
+}
+.table-mensile th.w24 {
+	padding: 0;
+}
+.table-mensile th.w24 button {
+	width: 100%;
+    padding: 0;
+    line-height: 25px;
+    background-color: darksalmon;
+}
+.table-mensile td.w220 input {
+	width: 100%;
+}
+.table-condensed > tbody > tr > td {
+	padding: 0;
+}
+.table-condensed input {
+	border-width: 0;
+    line-height: 25px;
+    background-color: beige;
+    padding: 0 2px
+}
+.btn_operazioni {
+	font-size: 12px;
+    padding: 3px 10px;
+}
+td.btn_rimuovi,
+td.btn_alert {
+	line-height: 25px;
+	width: 30px;
+    text-align: center;
+}
+td.btn_rimuovi button {
+    padding: 2px 5px;
+    line-height: 17px;
+}
+td.btn_alert button {
+	border: 0;
+    padding: 0 5px;
+    line-height: 25px;
+}
+td.btn_alert button > i {
+	color: gold;
+}
+.conferma {
+    clear: both;
+    float: right;
+    margin-right: 30px;
+    margin-top: -20px;
+}
+.table .txt_value {
+	line-height: 25px;
+    padding: 0 2px;
+}
+.mensile-rif {
+	padding: 5px 40px;
+	height: 36px;
+}
+.mensile-rif > div,
+.mensile-rif > div > span {
+    display: inline-block;
+    float: left;
+}
+.mensile-rif > div > span > button {
+	padding: 2px 10px;
+	font-size: 12px;
+	line-height: 20px;
+}
+.mensile-rif > div > span.info-mese {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 26px;
+    padding: 0 10px;
+    background-color: khaki;
+}
+input.mensile-corrente {
+    height: 25px;
+    width: 60px;
+}
+
+.table-mensile td {
+	position: relative;
+}
+tr.removed td:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-bottom: 1px solid #111;
+  width: 100%;
+}
+tr.removed td:last-child:before {
+  border-bottom: 0;
+}
+tr.removed td:after {
+  content: "\00B7";
+  font-size: 1px;
+}
+
+/* Modali */
+.modal-content,
+.modal-content button {
+	font-size: 12px;
+}
+.modal-content ul {
+	padding: 5px 20px;
+	overflow: hidden;
+}
+.modal-content ul li {
+	list-style-type: none;
+    width: 50%;
+    float: left;
+}
+.modal-content .buttons {
+	clear: both;
+	margin-bottom: 5px;
+	padding: 0 20px;
+    height: 25px;
+}
+.modal-content button {
+	padding: 3px 8px;
+}
+
+/* Loader */
+.page-loader.in {
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+.wait {
+    cursor: wait;
+}
+.page-loader {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background: url(../images/loader.gif) no-repeat scroll center center #eee;
+}

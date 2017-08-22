@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html data-ng-app="myMoneyApp">
+	<head>
+		<title>My Money</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<script src="resources/scripts/libs/jquery-2.2.4.min.js"></script>
+		<script src="resources/scripts/libs/angular-1.6.1.min.js"></script>
+		<script src="resources/scripts/libs/angular-route.min.js"></script>
+		<script src="resources/scripts/libs/ui-bootstrap-tpls-2.4.0.min.js"></script>
+		<script src="resources/scripts/libs/ng-table.min.js"></script>
+		
+		<script src="resources/scripts/app/app.services.js"></script>
+		<script src="resources/scripts/app/app.config.js"></script>
+		<script src="resources/scripts/app/app.costants.js"></script>
+		<script src="resources/scripts/app/app.directives.js"></script>
+		<script src="resources/scripts/app/controllers/MainController.js"></script>
+		<script src="resources/scripts/app/controllers/BeneficiariController.js"></script>
+		<script src="resources/scripts/app/controllers/BilancioMensileController.js"></script>
+		<script src="resources/scripts/app/controllers/CategorieController.js"></script>
+		<script src="resources/scripts/app/controllers/ContiController.js"></script>
+		
+		<link rel="shortcut icon" href="resources/images/favicon.ico"></link>
+		<link rel="stylesheet" href="resources/styles/bootstrap.css"></link>
+		<link rel="stylesheet" href="resources/styles/ng-table.min.css"></link>
+		<link rel="stylesheet" href="resources/styles/app.css"></link>
+		<script type="text/javascript">
+			angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+		</script>
+</head>
+	<body data-ng-controller="MainCtrl as ctrl">
+		<script type="text/ng-template" id="beneficiarioTemplate">
+			<div class="title-ricerca-object">Beneficiario</div>
+			<div class="main">
+    			<div class="form-group">
+      				<label>Cerca Beneficiario:</label>
+      				<input type="text" data-ng-model="selected" uib-typeahead="ben as ben.nome for ben in ctrl.listaBeneficiari | filter:$viewValue | limitTo:8" typeahead-min-length="0" typeahead-show-hint="true" class="form-control selezione" />
+    			</div>
+    			<button class="btn " data-ng-click="chiudiPopupDestinatario(selected)" data-ng-disabled="selected.length == 0">Conferma</button>
+				<button class="btn" data-ng-click="chiudiPopupDestinatario()">Chiudi</button>
+			</div>
+		</script>
+		<script type="text/ng-template" id="messageTemplate">
+			<div class="modal-header primaryColor">
+				{{::headerTitle}}
+				<span class="modal-close glyphicon glyphicon-remove" data-ng-click="close()"></span>
+			</div>
+			<div class="message">
+				<ul>
+					<li data-ng-repeat="categoria in lista | orderBy: 'nome'">
+						<input type="checkbox" data-ng-model="categoria.selected" /><span>{{categoria.nome}}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="buttons center">
+				<button class="btn btnApp left" data-ng-click="close()">Annulla</button>
+				<button class="btn btnApp right" data-ng-click="ok()">Conferma</button>
+			</div>
+		</script>
+		<div data-ng-include="'resources/views/includes/header.html'"></div>
+		<div data-ng-include="'resources/views/includes/menu.html'"></div>
+		<div class="clear"></div>
+		
+		<section id="content" role="main" data-ng-view></section>
+		
+		<div data-ng-include="'resources/views/includes/footer.html'"></div>
+		
+		<div data-ng-if="ctrl.operationInPending" class="page-loader in wait"></div>
+	</body>
+</html>

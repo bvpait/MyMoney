@@ -1,0 +1,33 @@
+<button data-ng-switch-when="true" 
+	type="button" 
+	class="btn btn-default btn_operazioni right" 
+	data-ng-show="row.idBeneficiario > 0" 
+	data-ng-click="rimuoviBeneficiario(row)"
+>
+	<i class="glyphicon glyphicon-remove"></i>
+</button>
+<button data-ng-switch-when="true" 
+	type="button"
+	class="btn btn-default btn_operazioni" 
+	popover-is-open="isOpened"
+	uib-popover-template="'beneficiarioTemplate'" 
+	popover-placement="auto top"
+	data-title="Beneficiario"
+	data-ng-class="{'right': (row.idBeneficiario > 0)}" 
+	data-ng-hide="row.idCategoria == 'TRASF'"
+>
+	<span data-ng-show="row.idBeneficiario > 0">
+		<i class="glyphicon glyphicon-refresh"></i>
+	</span>
+	<span data-ng-hide="row.idBeneficiario > 0">
+		<i class="glyphicon glyphicon-plus"></i> Aggiungi
+	</span>
+</button>
+<span data-ng-show="row.idBeneficiario > 0 && row.idCategoria != 'TRASF'" class="txt_value">
+	<span data-ng-switch-when="true">{{row.nomeBeneficiario}}</span>
+	<span data-ng-switch-default>{{row.nomeBeneficiario}}</span>
+</span>
+<select data-ng-switch-when="true" data-ng-show="row.idCategoria == 'TRASF'" data-ng-model="row.idContoTrasferimento">
+	<option data-ng-repeat="conto in ctrl.listaConti" value="{{conto.id}}">{{conto.nome}}</option> 
+</select>
+<span data-ng-switch-default data-ng-show="row.idCategoria == 'TRASF'" class="txt_value">{{ctrl.listaContiMap[row.idContoTrasferimento]}}</span>

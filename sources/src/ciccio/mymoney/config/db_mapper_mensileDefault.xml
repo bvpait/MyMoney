@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MensileDefault">
+
+	<resultMap id="TransazioneBaseResultMap" type="TransazioneBase">
+		<result property="id" column="id"/>
+ 		<result property="idConto" column="idConto"/>
+ 		<result property="nomeConto" column="nomeConto"/>
+ 		<result property="idCategoria" column="idCategoria"/>
+ 		<result property="nomeCategoria" column="nomeCategoria"/>
+ 		<result property="idSottoCategoria" column="idSottoCategoria"/>
+ 		<result property="nomeSottoCategoria" column="nomeSottoCategoria"/>
+	    <result property="idBeneficiario" column="idBeneficiario"/>
+	    <result property="nomeBeneficiario" column="nomeBeneficiario"/>
+	    <result property="importo" column="importo"/>
+	    <result property="tipo" column="tipo" typeHandler="ciccio.mymoney.costant.TipoTransazioneTypeHandler" />
+	    <result property="note" column="note"/>
+	    <result property="idTag" column="idTag"/>
+	</resultMap>
+	
+	<select id="getAll" parameterType="int" resultMap="TransazioneBaseResultMap">
+		SELECT *
+		  FROM (
+		  		SELECT c1.id as idCategoria, c1.nome as nomeCategoria, c.id as idSottoCategoria, c.nome as nomeSottoCategoria
+		  		  FROM categoria c, categoria c1 
+		  		 WHERE c.idPadre = c1.id 
+		  		   AND c.idPadre > 0
+		  		) cc
+		  	   left join (
+					SELECT m.id, m.idConto, p.nome as nomeConto, m.idCategoria as idSottoCategoriaCheck,
+						IFNULL(m.idBeneficiario, -1) as idBeneficiario, b.nome as nomeBeneficiario,
+			   			m.importo, m.tipo, m.note, m.idTag
+					FROM mensile_default m 
+						left join conto p on m.idConto = p.id 
+						left join beneficiario b on m.idBeneficiario = b.id
+						left join tag t on m.idTag = t.id
+				  WHERE p.id = #{idConto}
+				) as md on md.idSottoCategoriaCheck = cc.idSottoCategoria
+	</select>
+	
+	<select id="get" parameterType="int" resultMap="TransazioneBaseResultMap">
+		SELECT *
+		  FROM v_mensile_default_conto
+		 WHERE idConto = #{idConto}
+	</select>
+	
+	<insert id="insert" parameterType="TransazioneBase" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO mensile_default (
+			idConto,
+			idCategoria, 
+			idBeneficiario,
+			importo,
+			tipo,
+			note,
+			idTag
+		) VALUES (
+			#{idConto},
+			#{idCategoria},
+		<if test="idBeneficiario > 0">
+			#{idBeneficiario},
+		</if>
+		<if test="idBeneficiario == 0 || idBeneficiario == -1">
+			NULL,
+		</if>
+			#{importo},
+			#{tipo.value},
+			#{note},
+		<if test="idTag > 0">
+			#{idTag}
+		</if>
+		<if test="idTag == 0 || idTag == -1">
+			NULL
+		</if>
+		)
+	</insert>
+	
+	<update id="update" parameterType="TransazioneBase">
+		UPDATE mensile_default
+		   SET idConto = #{idConto},
+		   	   idCategoria = #{idCategoria},
+		<if test="idBeneficiario > 0">
+			   idBeneficiario = #{idBeneficiario},
+		</if>
+		<if test="idBeneficiario == 0 || idBeneficiario == -1">
+			   idBeneficiario = NULL,
+		</if>
+			   importo = #{importo},
+			   tipo = #{tipo.value},
+			   note = #{note},
+		<if test="idTag > 0">
+			   idTag = #{idTag}
+		</if>
+		<if test="idTag == 0 || idTag == -1">
+			   idTag = NULL
+		</if>
+		 WHERE id = #{id}
+	</update>
+	
+	<delete id="remove" parameterType="TransazioneBase">
+		DELETE FROM mensile_default
+		 WHERE id = #{id}
+	</delete>
+	
+	
+</mapper>

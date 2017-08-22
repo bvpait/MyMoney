@@ -1,0 +1,95 @@
+<div class="mensile-rif">
+	<div>
+		<span>
+			<input type="text" class="mensile-corrente" uib-datepicker-popup="{{format}}" data-ng-model="bilancioMensileCorrente.date" is-open="monthPopup.opened" datepicker-options="dateOptions" data-ng-required="true" close-text="Close" />
+		</span>
+		<span class="input-group">
+			<button type="button" class="btn btn-default" data-ng-click="openMonthPopup()"><i class="glyphicon glyphicon-calendar"></i></button>
+		</span>
+		<span>
+			<button class="btn" data-ng-click="apriDettaglioMensile()">Apri</button>
+		</span>
+	</div>
+	<div data-ng-show="bilancioMensileCorrente.anno > 0">
+		<span><button class="btn" data-ng-click="avanzaMeseCorrente(-1)"><i class="glyphicon glyphicon-circle-arrow-left"></i></button></span>
+		<span class="info-mese">{{ctrl.listaMesi[bilancioMensileCorrente.mese] + ' ' + bilancioMensileCorrente.anno}}</span>
+		<span><button class="btn" data-ng-click="avanzaMeseCorrente(1)"><i class="glyphicon glyphicon-circle-arrow-right"></i></button></span>
+	</div>
+	<div class="right">
+		<span>
+			<button class="btn" data-ng-click="salvaDati()">SALVA</button>
+		</span>
+	</div>
+</div>
+
+<div class="categoria_mensile">
+	<ul>
+		<li data-ng-repeat="categoria in listaCategorieBilancioMensile | orderBy: 'nome'">
+			<button class="btn" data-ng-click="selectCategoria(categoria.id)" data-ng-class="{selected: categoria.id == selectedIdCategoria}">{{categoria.nome}}</button>
+		</li>
+		<li data-ng-repeat-end data-ng-show="listaCategorieBilancioMensile != null">
+			<button class="btn" data-ng-click="selectCategoria('TRASF')" data-ng-class="{selected: categoria.id == selectedIdCategoria}">Trasferimenti</button>
+		</li>
+	</ul>
+</div>
+
+<div data-ng-show="selectedIdCategoria != 0" class="sottocategoria_mensile" uib-popover>
+	<table data-ng-table="tableCategoria" class="table table-condensed table-bordered table-hover table-mensile">
+		<thead>
+			<tr>
+				<th class="w24">ID</th>
+				<th class="w24"><button data-ng-hide="bilancioMensileCorrente.isNew" class="btn btn-default btn_operazioni" data-ng-click="modificaCategoria()"><i class="glyphicon glyphicon-pencil"></i></button></th>
+				<th>Nome</th>
+				<th>Beneficiario</th>
+				<th class="w65">Tipo</th>
+				<th class="w150">Calcola</th>
+				<th class="w70">Spesa</th>
+				<th>Tag</th>
+				<th class="w220">Note</th>
+				<th class="w24"><button class="btn btn-default btn_operazioni" data-ng-click="aggiungiRiga(row)"><i class="glyphicon glyphicon-plus"></i></button></th>
+			</tr>
+		</thead>
+		<tr data-ng-repeat="row in $data" data-ng-form="row.form" data-ng-init="row.isEditing = row.id == 0" data-ng-class="{'removed': row.isRemoved}">
+			<td class="txt_value">{{row.id}}</td>
+			<td class="btn_alert">
+				<button data-ng-show="row.isError" uib-popover="{{row.messageError}}" popover-trigger="'mouseenter'" type="button" class="btn btn-default">
+					<i class="glyphicon glyphicon-alert"></i>
+				</button>
+			</td>
+			<td data-ng-switch="row.isEditing">
+				<span data-ng-switch-default class="txt_value">{{row.nomeSottoCategoria}}</span>
+				<span data-ng-switch-when="true" data-ng-show="row.nomeSottoCategoria != null && row.idCategoria !='TRASF'" class="txt_value">{{row.nomeSottoCategoria}}</span>
+				<select data-ng-switch-when="true" data-ng-hide="row.nomeSottoCategoria != null || row.idCategoria =='TRASF'" data-ng-model="row.idSottoCategoria">
+					<option data-ng-repeat="categoria in ctrl.listaCategorie | filter:{idPadre:selectedIdCategoria}" value="{{categoria.id}}">{{categoria.nome}}</option> 
+				</select>
+			</td>
+			<td data-ng-switch="row.isEditing" data-ng-class="{center: row.idBeneficiario == -1}">
+				<destinatario row="row" ctrl="ctrl" id_cat="{{selectedIdCategoria}}"></destinatario>
+			</td>
+			<td data-ng-switch="row.isEditing">
+				<span data-ng-switch-default class="txt_value">{{ctrl.listaTipoTransazioneMap[row.tipo]}}</span>
+				<select data-ng-switch-when="true" data-ng-model="row.tipo">
+					<option value="1" selected>Uscita</option>
+					<option value="2">Entrata</option>
+				</select>
+			</td>
+			<td data-ng-switch="row.isEditing">
+				<span data-ng-switch-default class="txt_value">{{row.exp}}</span>
+				<input data-ng-switch-when="true" type="text" data-ng-model="row.exp" data-ng-change="calcolaRiga(row)">
+			</td>
+			<td class="txt_value">{{row.importo}}</td>
+			<td>{{row.tag}}</td>
+			<td class="w220" data-ng-switch="row.isEditing">
+				<span data-ng-switch-default>{{row.note}}</span>
+				<input data-ng-switch-when="true" type="text" data-ng-model="row.note">
+			</td>
+			<td class="btn_rimuovi"><button data-ng-click="eliminaRiga(row)"><i class="glyphicon glyphicon-trash"></i></button></td>
+		</tr>
+	</table>
+	<div>
+		<span>TOTALE Uscite: <strong><em>{{sum('USCITA') | currency:"€ "}}</em></strong> | <span>Totale Entrate: <strong><em>{{sum('ENTRATA') | currency:"€ "}}</em></strong>
+	</div>
+</div>
+<div class="conferma">
+	<button class="btn" data-ng-click="aggiungiCategoria()">ADD Categorie</button>
+</div>

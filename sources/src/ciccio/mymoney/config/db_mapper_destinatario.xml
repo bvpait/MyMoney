@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Destinatario">
+
+	<resultMap id="DestinatarioResultMap" type="Destinatario">
+ 		<result property="id" column="id"/>
+ 		<result property="nome" column="nome"/>
+	    <result property="idPadre" column="idPadre"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="DestinatarioResultMap">
+		SELECT * FROM beneficiario
+	</select>
+	
+	<insert id="insert" parameterType="Destinatario" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO beneficiario(nome, idPadre)
+		<if test="idPadre > 0">
+			VALUES (#{nome}, #{idPadre})
+		</if>
+		<if test="idPadre == 0">
+			VALUES (#{nome}, NULL)
+		</if>
+	</insert>
+	
+	
+</mapper>

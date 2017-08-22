@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Transazione">
+
+	<resultMap id="TransazioneResultMap" type="Transazione">
+ 		<result property="idConto" column="idConto"/>
+ 		<result property="anno" column="anno"/>
+ 		<result property="mese" column="mese"/>
+	    <result property="entrate" column="entrate"/>
+	    <result property="uscite" column="uscite"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="Transazione" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO transazione (
+			idConto,
+			anno, 
+			mese,
+			idContoTrasferimento,
+			idCategoria, 
+			idSottoCategoria,
+			idBeneficiario,
+			exp,
+			importo,
+			tipo,
+			note,
+			idTag
+		) VALUES (
+			#{idConto},
+			#{anno},
+			#{mese},
+		<if test="idContoTrasferimento > 0">
+			#{idContoTrasferimento},
+		</if>
+		<if test="idContoTrasferimento == 0">
+			NULL,
+		</if>
+		<if test="idCategoria > 0">
+			#{idCategoria},
+		</if>
+		<if test="idCategoria == 0">
+			NULL,
+		</if>
+		<if test="idSottoCategoria > 0">
+			#{idSottoCategoria},
+		</if>
+		<if test="idSottoCategoria == 0">
+			NULL,
+		</if>
+		<if test="idBeneficiario > 0">
+			#{idBeneficiario},
+		</if>
+		<if test="idBeneficiario == 0 || idBeneficiario == -1">
+			NULL,
+		</if>
+			#{exp},
+			#{importo},
+			#{tipo.value},
+			#{nota},
+		<if test="idTag > 0">
+			#{idTag}
+		</if>
+		<if test="idTag == 0 || idTag == -1">
+			NULL
+		</if>
+		)
+	</insert>
+	
+	<update id="update" parameterType="Transazione">
+		UPDATE transazione
+		   SET 
+			<if test="idContoTrasferimento > 0">
+			   idContoTrasferimento = #{idContoTrasferimento},
+			</if>
+			<if test="idContoTrasferimento == 0">
+			   idContoTrasferimento = NULL,
+			</if>
+			<if test="idCategoria > 0">
+			   idCategoria = #{idCategoria},
+			</if>
+			<if test="idCategoria == 0">
+			   idCategoria = NULL,
+			</if>
+			<if test="idSottoCategoria > 0">
+			   idSottoCategoria = #{idSottoCategoria},
+			</if>
+			<if test="idSottoCategoria == 0">
+			   idSottoCategoria = NULL,
+			</if>
+			<if test="idBeneficiario > 0">
+			   idBeneficiario = #{idBeneficiario},
+			</if>
+			<if test="idBeneficiario == 0 || idBeneficiario == -1">
+			   idBeneficiario = NULL,
+			</if>
+			   exp = #{exp},
+			   importo = #{importo},
+			   tipo = #{tipo.value},
+			   note = #{nota},
+			<if test="idTag > 0">
+			   idTag = #{idTag}
+			</if>
+			<if test="idTag == 0 || idTag == -1">
+			   idTag = NULL
+			</if>
+	  	 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+		   AND id = #{id}
+	</update>
+	
+	<delete id="remove" parameterType="Transazione">
+		DELETE FROM transazione
+		 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+		   AND id = #{id}
+	</delete>
+	
+	<delete id="removeTransfers" parameterType="BilancioMensile">
+		DELETE FROM transazione
+		 WHERE (idConto = #{idConto} OR idContoTrasferimento = #{idConto})
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+		   AND (tipo = 3 OR tipo = 4)
+	</delete>
+	
+	<delete id="remove2" parameterType="BilancioMensile">
+		DELETE FROM transazione
+		 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+	</delete>
+	
+</mapper>

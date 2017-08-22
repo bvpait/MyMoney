@@ -1,0 +1,23 @@
+<div>
+	<div>
+		<div>Beneficiari</div>
+		<table data-ng-table="tableBeneficiari" class="table table-condensed table-bordered table-hover table-mensile">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+				</tr>
+			</thead>
+			<tr data-ng-repeat="row in $data">
+				<td>{{row.id}}</td>
+				<td>{{row.nome}}</td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<div>
+			<label>Nome beneficiario</label> <input type="text" data-ng-model="newBeneficiario.nome">
+		</div>
+		<button type="button" class="btn" data-ng-click="inserisci()">Inserisci</button>
+	</div>
+</div>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BilancioMensile">
+
+	<resultMap id="BilancioMensileResultMap" type="BilancioMensile">
+ 		<result property="idConto" column="idConto"/>
+ 		<result property="anno" column="anno"/>
+ 		<result property="mese" column="mese"/>
+	    <result property="entrate" column="entrate"/>
+	    <result property="uscite" column="uscite"/>
+	</resultMap>
+	
+	<resultMap id="TransazioneResultMap" type="Transazione">
+		<result property="id" column="id"/>
+ 		<result property="idConto" column="idConto"/>
+ 		<result property="nomeConto" column="nomeConto"/>
+ 		<result property="idContoTrasferimento" column="idContoTrasferimento"/>
+ 		<result property="idCategoria" column="idCategoria"/>
+ 		<result property="nomeCategoria" column="nomeCategoria"/>
+ 		<result property="idSottoCategoria" column="idSottoCategoria"/>
+ 		<result property="nomeSottoCategoria" column="nomeSottoCategoria"/>
+	    <result property="idBeneficiario" column="idBeneficiario"/>
+	    <result property="nomeBeneficiario" column="nomeBeneficiario"/>
+	    <result property="exp" column="exp"/>
+	    <result property="importo" column="importo"/>
+	    <result property="tipo" column="tipo" typeHandler="ciccio.mymoney.costant.TipoTransazioneTypeHandler" />
+	    <result property="note" column="note"/>
+	    <result property="idTag" column="idTag"/>
+	</resultMap>
+	
+	<select id="check" resultType="int" parameterType="BilancioMensile">
+		SELECT Count(*)
+		  FROM v_report_conto_mensile
+		 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+	</select>
+	
+	<select id="getDettaglio" resultMap="TransazioneResultMap" parameterType="BilancioMensile">
+		SELECT *
+		  FROM v_bilancio_mensile_conto
+		 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+	</select>
+	
+	
+	<insert id="insert" parameterType="BilancioMensile">
+		INSERT INTO bilancio_mensile (
+			idConto,
+			anno, 
+			mese, 
+			entrate, 
+			uscite
+		) VALUES (
+			#{idConto},
+			#{anno},
+			#{mese},
+			#{entrate},
+			#{uscite}
+		)
+	</insert>
+	
+	<update id="update" parameterType="BilancioMensile">
+		UPDATE bilancio_mensile
+		   SET entrate = #{entrate},
+		       uscite = #{uscite}
+		 WHERE idConto = #{idConto}
+		   AND anno = #{anno}
+		   AND mese = #{mese}
+	</update>
+	
+</mapper>

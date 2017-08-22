@@ -1,0 +1,70 @@
+<div>Conti</div>
+<div>
+	<table data-ng-table="tableConti" class="table table-condensed table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nome</th>
+				<th>Entrate</th>
+				<th>Uscite</th>
+				<th>Saldo</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tr data-ng-repeat="row in $data">
+			<td>{{row.id}}</td>
+			<td>{{row.nome}}</td>
+			<td>{{row.entrate | currency:"€ "}}</td>
+			<td>{{row.uscite | currency:"€ "}}</td>
+			<td>{{(row.entrate - row.uscite) | currency:"€ "}}</td>
+			<td>
+				<button data-ng-click="associaTransazioniBase(row.id)">Associa</button>
+				<a href="spesaMensile"><button data-ng-click="selezionaContoCorrente(row.id)">Transazioni</button></a>
+			</td>
+		</tr>
+	</table>
+</div>
+<div>
+	<div><span>Inserisci un nuovo conto:</span></div>
+	<div>
+		<label>Nome:</label>  <input type="text" data-ng-model="newConto.nome">
+	</div>
+	<button type="button" class="btn" data-ng-click="inserisciConto()">Inserisci</button>
+</div>
+<div uib-popover>
+	<table data-ng-table="tableMensileDefault" class="table table-condensed table-bordered table-hover">
+	     <colgroup>
+	      <col width="3%" />
+          <col width="37%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+        </colgroup>
+		<tr class="ng-table-group" data-ng-repeat-start="group in $groups" data-ng-init="group.$hideRows = true; group.isSelected=checkAll(group)">
+          <td colspan="6">
+          	<input type="checkbox" data-ng-model="group.isSelected" data-ng-click="selectGroup(group)">
+            <a href="" data-ng-click="group.$hideRows = !group.$hideRows">
+              <span class="glyphicon" data-ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+        </tr>
+		<tr data-ng-hide="group.$hideRows" data-ng-repeat="row in group.data" data-ng-repeat-end>
+			<td data-title="''"><input type="checkbox" data-ng-model="row.isSelected"></td>
+			<td data-title="'Categoria'" class="txt_value">{{row.nomeSottoCategoria}}</td>
+			<td data-title="'Importo'"><input type="text" data-ng-model="row.importo"></td>
+			<td data-title="'Beneficiario'"><destinatario row="row" ctrl="ctrl"></destinatario></td>
+			<td data-title="'Tipo'">
+				<select data-ng-model="row.tipo">
+					<option value="1">Uscita</option>
+					<option value="2">Entrata</option>
+				</select>
+			</td>
+			<td data-title="'Note'"><input type="text" data-ng-model="row.note"></td>
+		</tr>
+	</table>
+</div>
+<div>
+	<button type="button" class="btn" data-ng-click="confermaAssociazioniTransazioni()">Conferma</button>
+</div>
